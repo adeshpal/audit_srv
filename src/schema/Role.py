@@ -6,7 +6,7 @@ class Role(sqlobject.SQLObject):
     _connection = conn
     name = sqlobject.IntCol(default=0)
     description = sqlobject.StringCol(length=30, notNone=True)
-    permissions = sqlobject.StringCol(dnotNone=True)
+    permissions = sqlobject.StringCol(notNone=True)
 
     def get_dict(self):
         """resp dict"""

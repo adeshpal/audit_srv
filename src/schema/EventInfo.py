@@ -6,9 +6,9 @@ class EventInfo(sqlobject.SQLObject):
     """Event info table"""
     _connection = conn
     user_id = sqlobject.IntCol(default=0)
-    event_type = sqlobject.IntCol(default=0)  
+    event_type = sqlobject.StringCol(notNone=True)
     service_id = sqlobject.IntCol(default=0)  
-    service_name = sqlobject.StringCol(length=30, notNone=True)
+    service_name = sqlobject.StringCol(notNone=True)
     event_details = sqlobject.JSONCol(default = {})
     created_on = sqlobject.DateTimeCol(default=datetime.now(), sqlType='DATETIME')
 
