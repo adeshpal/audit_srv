@@ -1,26 +1,21 @@
 #Handler file to route all the incoming request to service
+import logging as log
 import falcon
-from src.producer import produce_event
-from src.consumer import consume_event
-import logging
-import json
+import src.params as param
+from src.Handler.VersionHandler import ValidateParameter
+import src.AuditServices.EventSrv as EventSrv
 
-API_VERSIONS = ['v1']
-#ValidateParams
-class ValidateParameter:
-    def validate_version(self, req, resp, resource, params, API_VERSIONS):
-        if params.get('version') not in API_VERSIONS:
-            raise falcon.HTTPBadRequest(title='Invalid API Version',
-            description="Please Provide valid API version to access resources")
-
-# @falcon.before(ValidateParameter.validate_version, ['v1', 'v2'])
+@falcon.before(ValidateParameter.validate_version, param.API_VERSIONS)
 class EventHandler:
+    """All consumer HTTP methods"""
     def on_get(self, req, resp, version):
-        logging.warning("--------->>> request in get eventHandler: req= %s, resp= %s, -- version=:%s", req, resp, version)
-        consume_event()
+        """Get event"""
+        log.warning("on_get::Request details, req= %s, resp= %s, version=:%s",
+                        req, resp, version)
+        EventSrv.get_all_events(req, resp)
 
-    def on_post(self, req, resp, version):
-        body = json.loads(req.stream.read())
-        logging.warning("--------->>> request in eventHandler: req= %s, resp= %s, -- version=:%s and data= %s",
-                        req, resp, version, body)
-        # produce_event(body)
+    def on_get_user(self, req, resp, version, user_id):
+        """Get event"""
+        log.warning("Request details, req= %s, resp= %s, version=:%s",
+                        req, resp, version)
+        EventSrv.get_user_events(req, resp, user_id)

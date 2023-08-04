@@ -1,27 +1,38 @@
+import threading
+import time
+import logging as log
 import pika
-import logging
-import json
-from src.DataLayer.DLEventInfo import process_event_into_db
+
+import src.AuditServices.EventSrv as EventSrv
+import src.params as param
+
+INITIAL_SLEEP_TIME = 30
+
+class ConsumeAuditEvent(threading.Thread):
+    def __init__(self,name):
+        threading.Thread.__init__(self)
+        self.setName(name)
+        log.warning("****** thread name: %s", name)
+
+    def run(self):
+        time.sleep(INITIAL_SLEEP_TIME)
+        self.consume_event()
 
 
+    def consume_event(self):
+        """ consume event from the queue and process into db"""
+        log.warning("-------in consume event is : %s", "")
 
-def consume_event():
-    logging.warning("-------in consume event is : %s", "")
+        connection_params = pika.ConnectionParameters(host=param.QUEUE_HOST,port=param.QUEUE_PORT)
+        connection = pika.BlockingConnection(connection_params)
+        channel = connection.channel()
 
-    connection_params = pika.ConnectionParameters(host='172.17.0.2',port=5672)
-    #connection_params = pika.ConnectionParameters(host='127.0.0.1',port=5672)
+        def on_message_received(ch, method, properties, body):
+            log.warning("Consumer :: received new message : %s", body)
+            EventSrv.create_event(body)
 
-    connection = pika.BlockingConnection(connection_params)
-    channel = connection.channel()
-
-    def on_message_received(ch, method, properties, body):
-        data = json.loads(body)
-        logging.warning("received new message : %s", data)
-        process_event_into_db(data)
-
-    channel.queue_declare(queue='letterbox')
-    channel.basic_consume(queue='letterbox', auto_ack=True, on_message_callback=on_message_received)
-    logging.warning("starting consuming--->")
-    channel.start_consuming()
-
-# consume_event()
+        channel.queue_declare(queue=param.QUEUE_NAME)
+        channel.basic_consume(queue=param.QUEUE_NAME, auto_ack=True, 
+                            on_message_callback=on_message_received)
+        log.warning("starting consuming--->")
+        channel.start_consuming()
