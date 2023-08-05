@@ -8,5 +8,5 @@ class ValidateParameter:
     def validate_version(req, resp, resource, params, ALLOWED_VERSIONS):
         """"Suported versions"""
         if params.get('version') not in ALLOWED_VERSIONS:
-            raise falcon.HTTPBadRequest(title='Wrong API Version',
-            description="Please Provide valid API version to access resources")
+            raise falcon.HTTPBadRequest(title='Unsupported API Version',
+            description="Request API version is not found, retry with valid API version to access resources")

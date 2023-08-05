@@ -4,17 +4,16 @@ from src import conn
 class Role(sqlobject.SQLObject):
     """Role info"""
     _connection = conn
-    name = sqlobject.IntCol(default=0)
-    description = sqlobject.StringCol(length=30, notNone=True)
-    permissions = sqlobject.StringCol(notNone=True)
+    name = sqlobject.StringCol(notNone=True)
+    permissions = sqlobject.StringCol(default="")
+    description = sqlobject.StringCol(default="")
 
     def get_dict(self):
         """resp dict"""
         return {
             "id": self.id,
             "name": self.name,
-            "description": self.description,
             "permissions": self.permissions,
-           
+            "description": self.description 
         }
 Role.createTable(ifNotExists=True)

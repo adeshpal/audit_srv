@@ -9,12 +9,12 @@ consumer_thread = ConsumeAuditEvent("Consume audit event thread")
 consumer_thread.start()
 
 
-from src.keyRotation import keyAuditKeyRotate
-key_rotate = keyAuditKeyRotate("Key rotation thread")
-key_rotate.start()
+# from src.keyRotation import keyAuditKeyRotate
+# key_rotate = keyAuditKeyRotate("Key rotation thread")
+# key_rotate.start()
 
-consumer_thread.join()
-key_rotate.join()
+# consumer_thread.join()
+# key_rotate.join()
 
 
 

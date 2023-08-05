@@ -15,6 +15,8 @@ class EventInfo(sqlobject.SQLObject):
     event_details = sqlobject.JSONCol(default = {})
     created_on = sqlobject.DateTimeCol(default=sqlobject.DateTimeCol.now, sqlType='DATETIME')
 
+    user_index = sqlobject.DatabaseIndex(user_id)
+
     def get_dict(self):
         """resp dict"""
         return {

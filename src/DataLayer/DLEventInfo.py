@@ -4,6 +4,9 @@ Database event operation layer
 import logging as log
 import falcon
 from src.schema.EventInfo import EventInfo
+from src.schema.Role import Role
+import sqlobject
+
 class DLEventInfo:
     """DB operations on event_info table"""
     def create_event(self, event_details):
@@ -20,9 +23,22 @@ class DLEventInfo:
         except Exception as fault:
             log.error("Faild to add data into db, error=%s", fault)
             raise falcon.HTTPBadRequest(title="Invalid data", description="Try again with valid data!")
-        
 
+    def get_user_events(self, user_id):
+        """Get records by user"""
+        log.warning("----Fetching records for user=%s", user_id)
+        return EventInfo.select(EventInfo.q.user_id==int(user_id))
+    
     def get_all_events(self):
-        log.warning("%s", "----->> fetching all records")
-        
+        """Get all records available in db"""
+        log.warning("%s", "----Fetching all records-----")
         return EventInfo.select(orderBy=EventInfo.q.id)
+
+    def get_events_by_servie(self, services):
+        """Get all records available in db"""
+        try:
+            log.warning("----Fetching records for : %s", services)
+            return EventInfo.select(sqlobject.IN(EventInfo.q.service_name, services))
+        except sqlobject.SQLObjectNotFound as err:
+            log.error("Faild to get data from db, error=%s", err)
+        return []
