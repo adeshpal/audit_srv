@@ -2,7 +2,8 @@
 Common lib methods for auditSrv
 """
 import base64
-
+import jwt
+import logging as log
 
 def encoded_str(key):
     """
@@ -27,3 +28,22 @@ def decoded_str(key):
     
     print(f"Decoded string: {str_key}")
     return str_key
+
+def get_jwt_token(payload):
+    try:
+        encoded_jwt = jwt.encode(
+            {
+                "user_id" : payload["user_id"],
+                "service_name" : payload["service_name"]
+            },
+            "secret", 
+            algorithm="HS256")
+        return encoded_jwt
+    except Exception as err:
+        log.error("Unable to generate jwt token, error:=%s", err)
+    return None
+
+"""
+payload = {"user_id" :1}
+token = jwt.encode({"user_id" :1}, "secret", algorithm="HS256")
+"""

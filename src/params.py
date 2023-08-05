@@ -20,3 +20,6 @@ LICENSE_SERVICE="licenseSrv"
 
 #Events
 USER_CREATE = "userCreate"
+
+
+# key rotation config values

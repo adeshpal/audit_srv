@@ -42,3 +42,7 @@ class DLEventInfo:
         except sqlobject.SQLObjectNotFound as err:
             log.error("Faild to get data from db, error=%s", err)
         return []
+    def get_events_before(self, end):
+        """Get all records available in db"""
+        log.warning("----Fetching records till: %s", end)
+        return EventInfo.select().filter(EventInfo.q.created_on<end)

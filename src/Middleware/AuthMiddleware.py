@@ -1,13 +1,18 @@
+"""
+Authentication layer
+"""
+
 import jwt
 import falcon
-from sqlobject import SQLObjectNotFound
+import sqlobject
+from src.DataLayer.DLUser import DLUser
 
 class AuthMiddleware:
 
     def process_request(self, req, resp):
         if "/login" in req.path:
             return
-        token = req.get_header('Authorization')
+        token = req.get_header('x-auditsrv-token')
 
         if token is None:
             description = ('Please provide an auth token '
@@ -26,10 +31,9 @@ class AuthMiddleware:
                                           href='http://docs.example.com/auth')
 
     def _token_is_valid(self, token):
-        return True
-        # try:
-        #     payload = jwt.decode(token, "secret", algorithms="HS256")
-        #     User.get(payload['user_id'])
-        #     return True
-        # except (jwt.DecodeError, jwt.ExpiredSignatureError, SQLObjectNotFound):
-        #     return False
+        try:
+            payload = jwt.decode(token, "secret", algorithms="HS256")
+            DLUser().get_user(payload['user_id'])
+            return True
+        except (jwt.DecodeError, jwt.ExpiredSignatureError, sqlobject.SQLObjectNotFound):
+            return False
