@@ -20,4 +20,4 @@ def write_message(file_name, msg):
     # log.warning("------path is= %s, mode: %s, real=%s", path, mode, real)
     with open(file=file_name, encoding="utf-8", mode='w+') as file:
         log.warning("Writing event data into file= %s, data=%s",file_name, val)
-        file.write("Jai Mata DI")
+        file.write(val)

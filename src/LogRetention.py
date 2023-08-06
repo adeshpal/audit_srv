@@ -21,9 +21,7 @@ class keyAuditKeyRotate(threading.Thread):
         end = today - relativedelta(days=LOG_RETENTION_TIME)
         log.warning("---> Fetching event before: %s, from=%s", end, today)
         events =  DLEventInfo().get_events_before(end)
-        # file_name = "events-log-"+ end.strftime("%b-%d-%Y-%H-%M-%S")+".txt"
-        file_name = "audit-events_retention.txt"
-        # for event in events:
+        file_name = "events-log-"+ end.strftime("%b-%d-%Y-%H-%M-%S")+".txt"
         MessageWriter.write_message(file_name, events)
-        log.warning("-------->>> all result from key rotation: %s", str(events))
-        # DLEventInfo().delete_events_before(end)
+        log.warning("Events clean up from db: %s", str(events))
+        DLEventInfo().delete_events_before(end)

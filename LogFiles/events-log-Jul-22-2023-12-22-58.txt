@@ -1,0 +1,3 @@
+                                                                                                                                                                 0
+0  <EventInfo 17 user_id=5 event_type='licDelete' service_id=3 service_name='Testttting' event_details="{'oldName': 'Goog...}" created_on='datetime.datetime...)'>
+1   <EventInfo 18 user_id=5 event_type='licDelete' service_id=3 service_name='to delete' event_details="{'oldName': 'Goog...}" created_on='datetime.datetime...)'>
