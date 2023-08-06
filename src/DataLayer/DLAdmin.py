@@ -25,7 +25,7 @@ class DLAdmin:
 
     def get_admin_details(self, email):
         """Get records by user"""
-        log.warning("----Fetching records for user=%s", email)
+        log.warning("Getting admin info for user=%s", email)
         return Admin.select(Admin.q.email==email)
        
     def get_all_admins(self):

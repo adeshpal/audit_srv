@@ -14,6 +14,3 @@ key_rotate.start()
 
 # consumer_thread.join()
 # key_rotate.join()
-
-
-

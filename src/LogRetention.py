@@ -4,10 +4,10 @@ import time
 import threading
 from src.DataLayer.DLEventInfo import DLEventInfo
 from dateutil.relativedelta import relativedelta
-
-
+import src.common.MessageWriter as MessageWriter
+import os
 LOG_RETENTION_TIME = 15 # Days
-INITIAL_SLEEP = 60 # seconds
+INITIAL_SLEEP = 10 # seconds
 
 class keyAuditKeyRotate(threading.Thread):
     def __init__(self, name):
@@ -18,8 +18,12 @@ class keyAuditKeyRotate(threading.Thread):
     def run(self):
         time.sleep(INITIAL_SLEEP)
         today = datetime.datetime.today()
-        end = today - relativedelta(day=LOG_RETENTION_TIME)
-        log.warning("---> Fetching event before: %s", end)
-        result =  DLEventInfo().get_events_before(end)
-        log.warning("-------->>> all result from key rotation: %s", str(result))
-        
+        end = today - relativedelta(days=LOG_RETENTION_TIME)
+        log.warning("---> Fetching event before: %s, from=%s", end, today)
+        events =  DLEventInfo().get_events_before(end)
+        # file_name = "events-log-"+ end.strftime("%b-%d-%Y-%H-%M-%S")+".txt"
+        file_name = "audit-events_retention.txt"
+        # for event in events:
+        MessageWriter.write_message(file_name, events)
+        log.warning("-------->>> all result from key rotation: %s", str(events))
+        # DLEventInfo().delete_events_before(end)

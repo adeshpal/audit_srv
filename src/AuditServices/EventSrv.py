@@ -47,7 +47,6 @@ def get_user_events(req, resp, user_id):
         result = [event.get_dict() for event in events]
         if len(result) == 0:
             response["message"] = "No matched record found!"
-        log.warning("----- %s", str(result))
         response["result"] = result
         resp.status = falcon.HTTP_200
     except Exception as err:
@@ -87,12 +86,15 @@ def get_all_events(req, resp):
 
 def get_user_permissions(email):
     """Method to get all use permissions"""
-    admin_info = DLAdmin().get_admin_details(email)
-    log.warning("-------- admin_info: %s", str(admin_info[0]))
-    if admin_info:
-        role = DLRole().get_role_by_id(admin_info[0].role)
-        log.warning("-------- role: %s", str(role))
-        permissions = role.permissions
-        log.warning("-------- permissions: %s", str(permissions))
-        return permissions
+    try:
+        admin_info = DLAdmin().get_admin_details(email)
+        if admin_info:
+            log.warning("Got Admin_info: %s, user=%s", str(admin_info[0]), err)
+            role = DLRole().get_role_by_id(admin_info[0].role)
+            log.warning("Role info for user=%s, role=%s",email, str(role))
+            permissions = role.permissions
+            log.warning("-------- permissions: %s", str(permissions))
+            return permissions
+    except Exception as err:
+        log.warning("Unable to get permissions for user=:%s, error:%s", email, err)
     return ""

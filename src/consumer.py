@@ -12,7 +12,7 @@ class ConsumeAuditEvent(threading.Thread):
     def __init__(self,name):
         threading.Thread.__init__(self)
         self.setName(name)
-        log.warning("****** thread name: %s", name)
+        log.warning("Thread started : %s", name)
 
     def run(self):
         time.sleep(INITIAL_SLEEP_TIME)
@@ -21,7 +21,7 @@ class ConsumeAuditEvent(threading.Thread):
 
     def consume_event(self):
         """ consume event from the queue and process into db"""
-        log.warning("-------in consume event is : %s", "")
+        log.warning("Event consumer started... : %s", "")
 
         connection_params = pika.ConnectionParameters(host=param.QUEUE_HOST,port=param.QUEUE_PORT)
         connection = pika.BlockingConnection(connection_params)

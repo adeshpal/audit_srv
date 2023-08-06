@@ -11,6 +11,6 @@ INSERT INTO `audit_srv`.`user` (`name`, `email`, `info`)
 VALUES ('User_4', 'user4@devicesrv.com', 'user_2-deviceSrv');
 
 INSERT INTO `audit_srv`.`user` (`name`, `email`, `info`) 
-VALUES ('User_5', 'user4@licsrv.com', 'user_1-licSrv');
+VALUES ('User_5', 'user5@licsrv.com', 'user_1-licSrv');
 INSERT INTO `audit_srv`.`user` (`name`, `email`, `info`) 
-VALUES ('User_6', 'user4@licsrv.com', 'user_2-licSrv');
+VALUES ('User_6', 'user6@licsrv.com', 'user_2-licSrv');

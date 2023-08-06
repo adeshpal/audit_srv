@@ -17,6 +17,6 @@ class User(sqlobject.SQLObject):
             "name": self.name,
             "email": self.email,
             "info": self.info,
-            "created_on": self.created_on,
+            "created_on": self.created_on if self.created_on else "",
         }
 User.createTable(ifNotExists=True)

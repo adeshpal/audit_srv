@@ -25,8 +25,8 @@ class DLUser:
     def get_user(self, user_id):
         """Get records by user"""
         try:
-            log.warning("----Fetching records for user=%s", user_id)
-            return User.get(user_id)
+            log.warning("Getting user info for ID=%s", user_id)
+            return User.get(int(user_id))
         except sqlobject.SQLObjectNotFound as err:
             log.error("User not found with id= %s, error=%s", user_id, err)
         return ""

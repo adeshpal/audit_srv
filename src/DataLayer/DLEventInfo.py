@@ -7,6 +7,7 @@ from src.schema.EventInfo import EventInfo
 from src.schema.Role import Role
 import sqlobject
 
+
 class DLEventInfo:
     """DB operations on event_info table"""
     def create_event(self, event_details):
@@ -26,7 +27,7 @@ class DLEventInfo:
 
     def get_user_events(self, user_id):
         """Get records by user"""
-        log.warning("----Fetching records for user=%s", user_id)
+        log.warning("Fetching events of userID=%s", user_id)
         return EventInfo.select(EventInfo.q.user_id==int(user_id))
     
     def get_all_events(self):
@@ -37,12 +38,18 @@ class DLEventInfo:
     def get_events_by_servie(self, services):
         """Get all records available in db"""
         try:
-            log.warning("----Fetching records for : %s", services)
+            log.warning("----Fetching records for services : %s", services)
             return EventInfo.select(sqlobject.IN(EventInfo.q.service_name, services))
         except sqlobject.SQLObjectNotFound as err:
             log.error("Faild to get data from db, error=%s", err)
         return []
+    
     def get_events_before(self, end):
-        """Get all records available in db"""
+        """Get records available in db"""
         log.warning("----Fetching records till: %s", end)
-        return EventInfo.select().filter(EventInfo.q.created_on<end)
+        return EventInfo.select().filter(EventInfo.q.created_on<=end)
+    
+    def delete_events_before(self, end):
+        """Delete all records available in db"""
+        log.warning("----deleting records till: %s", end)
+        return EventInfo.deleteMany(EventInfo.q.created_on<=end)
