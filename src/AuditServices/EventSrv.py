@@ -39,11 +39,11 @@ def get_user_events(req, resp, user_id):
         events = []
         if permissions == "all":
             events = DLEventInfo().get_all_events()
+        elif permissions:
+            permission_arr = permissions.split(',')
+            events = DLEventInfo().get_events_by_servie(tuple(permission_arr))
         else:
             events = DLEventInfo().get_user_events(user_id)
-        # elif permissions:
-        #     permission_arr = permissions.split(',')
-        #     DLEventInfo().get_events_by_servie()
         result = [event.get_dict() for event in events]
         if len(result) == 0:
             response["message"] = "No matched record found!"
@@ -89,7 +89,7 @@ def get_user_permissions(email):
     try:
         admin_info = DLAdmin().get_admin_details(email)
         if admin_info:
-            log.warning("Got Admin_info: %s, user=%s", str(admin_info[0]), err)
+            log.warning("Got Admin_info: %s, user=%s", str(admin_info[0]), email)
             role = DLRole().get_role_by_id(admin_info[0].role)
             log.warning("Role info for user=%s, role=%s",email, str(role))
             permissions = role.permissions
